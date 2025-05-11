@@ -1,8 +1,22 @@
 import "../css/MovieCard.css";
+import { useMovieContext } from "../contexts/MovieContext";
 
 function MovieCard({ movie }) {
-  function onFavouriteClick() {
-    alert("clicked");
+  const { isFavourite, addToFavourites, removeFromFavourites } =
+    useMovieContext();
+  const favourite = isFavourite(movie.id);
+
+  function onFavouriteClick(e) {
+    e.preventDefault();
+    console.log("Before click:", favourite);
+    if (favourite) {
+      removeFromFavourites(movie.id);
+      console.log("is favourite");
+    } else {
+      addToFavourites(movie);
+      console.log("is not favourite");
+    }
+    console.log("After click:", isFavourite(movie.id));
   }
 
   function getMonth(monthNumber) {
@@ -33,8 +47,11 @@ function MovieCard({ movie }) {
         />
       </div>
       <div className="movie-overlay">
-        <button className="favourite-btn" onClick={onFavouriteClick}>
-          ♡
+        <button
+          className={`favourite-btn ${favourite ? "active" : ""}`}
+          onClick={onFavouriteClick}
+        >
+          ♥
         </button>
       </div>
       <div className="movie-info">
